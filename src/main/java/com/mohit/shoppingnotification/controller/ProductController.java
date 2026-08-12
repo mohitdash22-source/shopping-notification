@@ -1,10 +1,13 @@
 package com.mohit.shoppingnotification.controller;
 
+import com.mohit.shoppingnotification.dto.ProductResponseDTO;
 import com.mohit.shoppingnotification.model.Product;
 import com.mohit.shoppingnotification.service.ProductService;
 import org.springframework.web.bind.annotation.* ;
-
+import jakarta.validation.Valid;
 import java.util.List;
+import com.mohit.shoppingnotification.dto.ProductRequestDTO;
+
 
 @RestController
 @RequestMapping("/products")
@@ -15,24 +18,32 @@ public class ProductController {
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
+
     @PostMapping
-    public Product createProduct(@RequestBody Product product) {
-        return productService.createProduct(product);
+    public ProductResponseDTO createProduct(
+            @Valid @RequestBody ProductRequestDTO requestDTO) {
+
+        return productService.createProduct(requestDTO);
     }
+
     @GetMapping
-    public List<Product> getAllProducts() {
+    public List<ProductResponseDTO> getAllProducts(){
         return productService.getAllProducts();
     }
+
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable Integer id) {
+    public ProductResponseDTO getProductById(@PathVariable Integer id) {
         return productService.getProductById(id);
     }
-    @PutMapping("/{id}")
-    public Product updateProduct(@PathVariable Integer id,
-                                 @RequestBody Product product) {
 
-        return productService.updateProduct(id, product);
+    @PutMapping("/{id}")
+    public ProductResponseDTO updateProduct(
+            @PathVariable Integer id,
+            @Valid @RequestBody ProductRequestDTO requestDTO) {
+
+        return productService.updateProduct(id, requestDTO);
     }
+
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable Integer id) {
         productService.deleteProduct(id);

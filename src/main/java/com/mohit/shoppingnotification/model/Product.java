@@ -13,10 +13,8 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String name;
-
-    private Double price;
+    private double price;
 
     public Product() {
     }
@@ -50,4 +48,5 @@ public class Product {
     public void setPrice(Double price) {
         this.price = price;
     }
+
 }
