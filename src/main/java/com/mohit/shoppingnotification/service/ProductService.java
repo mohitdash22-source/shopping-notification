@@ -1,11 +1,14 @@
 package com.mohit.shoppingnotification.service;
 
 import com.mohit.shoppingnotification.dto.ProductResponseDTO;
+import com.mohit.shoppingnotification.exception.CategoryNotFoundException;
 import com.mohit.shoppingnotification.exception.ProductNotFoundException;
+import com.mohit.shoppingnotification.model.Category;
 import com.mohit.shoppingnotification.model.Product;
 import com.mohit.shoppingnotification.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import com.mohit.shoppingnotification.dto.ProductRequestDTO;
+import com.mohit.shoppingnotification.repository.CategoryRepository;
 
 import java.util.List;
 
@@ -13,9 +16,12 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository,
+                          CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public ProductResponseDTO createProduct(ProductRequestDTO requestDTO) {
@@ -24,6 +30,15 @@ public class ProductService {
 
         product.setName(requestDTO.getName());
         product.setPrice(requestDTO.getPrice());
+
+        Category category = categoryRepository
+                .findById(requestDTO.getCategoryId())
+                .orElseThrow(() ->
+                        new CategoryNotFoundException(
+                                "Category not found with id: "
+                                        + requestDTO.getCategoryId()));
+
+        product.setCategory(category);
 
         Product savedProduct = productRepository.save(product);
 
@@ -65,17 +80,32 @@ public class ProductService {
         return dto;
     }
 
-    public ProductResponseDTO updateProduct(Integer id, ProductRequestDTO requestDTO) {
+    public ProductResponseDTO updateProduct(
+            Integer id,
+            ProductRequestDTO requestDTO) {
 
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+        Product existingProduct = productRepository
+                .findById(id)
+                .orElseThrow(() ->
+                        new ProductNotFoundException(
+                                "Product not found with id: " + id));
 
-        product.setName(requestDTO.getName());
-        product.setPrice(requestDTO.getPrice());
+        Category category = categoryRepository
+                .findById(requestDTO.getCategoryId())
+                .orElseThrow(() ->
+                        new CategoryNotFoundException(
+                                "Category not found with id: "
+                                        + requestDTO.getCategoryId()));
 
-        Product updatedProduct = productRepository.save(product);
+        existingProduct.setName(requestDTO.getName());
+        existingProduct.setPrice(requestDTO.getPrice());
+        existingProduct.setCategory(category);
 
-        ProductResponseDTO responseDTO = new ProductResponseDTO();
+        Product updatedProduct =
+                productRepository.save(existingProduct);
+
+        ProductResponseDTO responseDTO =
+                new ProductResponseDTO();
 
         responseDTO.setId(updatedProduct.getId());
         responseDTO.setName(updatedProduct.getName());

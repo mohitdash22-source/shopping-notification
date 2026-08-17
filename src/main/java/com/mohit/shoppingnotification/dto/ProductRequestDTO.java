@@ -11,6 +11,8 @@ public class ProductRequestDTO {
     @Positive(message = "Price must be greater than 0")
     private double price;
 
+    private Integer categoryId;
+
     public String getName() {
         return name;
     }
@@ -25,5 +27,13 @@ public class ProductRequestDTO {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
     }
 }
