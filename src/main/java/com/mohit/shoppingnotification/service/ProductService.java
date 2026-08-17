@@ -1,5 +1,7 @@
 package com.mohit.shoppingnotification.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import com.mohit.shoppingnotification.dto.ProductResponseDTO;
 import com.mohit.shoppingnotification.exception.CategoryNotFoundException;
 import com.mohit.shoppingnotification.exception.ProductNotFoundException;
@@ -51,19 +53,17 @@ public class ProductService {
         return responseDTO;
     }
 
-    public List<ProductResponseDTO> getAllProducts() {
+    public Page<ProductResponseDTO> getAllProducts(Pageable pageable) {
 
-        List<Product> products = productRepository.findAll();
+        Page<Product> products = productRepository.findAll(pageable);
 
-        return products.stream()
-                .map(product -> {
-                    ProductResponseDTO dto = new ProductResponseDTO();
-                    dto.setId(product.getId());
-                    dto.setName(product.getName());
-                    dto.setPrice(product.getPrice());
-                    return dto;
-                })
-                .toList();
+        return products.map(product -> {
+            ProductResponseDTO dto = new ProductResponseDTO();
+            dto.setId(product.getId());
+            dto.setName(product.getName());
+            dto.setPrice(product.getPrice());
+            return dto;
+        });
     }
 
     public ProductResponseDTO getProductById(Integer id) {

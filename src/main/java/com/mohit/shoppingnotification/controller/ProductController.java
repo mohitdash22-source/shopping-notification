@@ -3,10 +3,13 @@ package com.mohit.shoppingnotification.controller;
 import com.mohit.shoppingnotification.dto.ProductResponseDTO;
 import com.mohit.shoppingnotification.model.Product;
 import com.mohit.shoppingnotification.service.ProductService;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.* ;
 import jakarta.validation.Valid;
 import java.util.List;
 import com.mohit.shoppingnotification.dto.ProductRequestDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 
 @RestController
@@ -27,8 +30,10 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductResponseDTO> getAllProducts(){
-        return productService.getAllProducts();
+    public Page<ProductResponseDTO> getAllProducts(
+            @PageableDefault(size = 10, page = 0) Pageable pageable) {
+
+        return productService.getAllProducts(pageable);
     }
 
     @GetMapping("/{id}")
