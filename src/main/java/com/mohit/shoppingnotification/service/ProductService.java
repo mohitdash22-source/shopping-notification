@@ -124,4 +124,22 @@ public class ProductService {
 
         productRepository.delete(existingProduct);
     }
+
+    public Page<ProductResponseDTO> searchProductsByName(
+            String name,
+            Pageable pageable) {
+
+        Page<Product> products =
+                productRepository.findByNameContaining(name, pageable);
+
+        return products.map(product -> {
+            ProductResponseDTO dto = new ProductResponseDTO();
+
+            dto.setId(product.getId());
+            dto.setName(product.getName());
+            dto.setPrice(product.getPrice());
+
+            return dto;
+        });
+    }
 }

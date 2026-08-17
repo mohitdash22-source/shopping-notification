@@ -1,8 +1,14 @@
 package com.mohit.shoppingnotification.repository;
 
 import com.mohit.shoppingnotification.model.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProductRepository extends JpaRepository<Product, Integer> {
+import java.util.List;
 
+public interface ProductRepository extends JpaRepository<Product, Integer> {
+    Page<Product> findByNameContaining(String name, Pageable pageable);
+
+    List<Product> findByPriceBetween(Double minPrice, Double maxPrice);
 }

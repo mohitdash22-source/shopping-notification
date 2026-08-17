@@ -53,4 +53,12 @@ public class ProductController {
     public void deleteProduct(@PathVariable Integer id) {
         productService.deleteProduct(id);
     }
+
+    @GetMapping("/search")
+    public Page<ProductResponseDTO> searchProducts(
+            @RequestParam String name,
+            Pageable pageable) {
+
+        return productService.searchProductsByName(name, pageable);
+    }
 }
