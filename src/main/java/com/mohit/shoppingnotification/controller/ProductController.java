@@ -1,5 +1,6 @@
 package com.mohit.shoppingnotification.controller;
 
+import com.mohit.shoppingnotification.dto.PaginationResponseDTO;
 import com.mohit.shoppingnotification.dto.ProductResponseDTO;
 import com.mohit.shoppingnotification.model.Product;
 import com.mohit.shoppingnotification.service.ProductService;
@@ -60,5 +61,27 @@ public class ProductController {
             Pageable pageable) {
 
         return productService.searchProductsByName(name, pageable);
+    }
+
+    @GetMapping("/filter")
+    public PaginationResponseDTO filterProducts(
+            @RequestParam Double minPrice,
+            @RequestParam Double maxPrice,
+            Pageable pageable) {
+
+        return productService.filterProductsByPrice(
+                minPrice,
+                maxPrice,
+                pageable
+        );
+    }
+
+    @GetMapping("/price")
+    public Page<Product> getProductsByPrice(
+            @RequestParam double min,
+            @RequestParam double max,
+            Pageable pageable
+    ) {
+        return productService.getProductsByPrice(min, max, pageable);
     }
 }

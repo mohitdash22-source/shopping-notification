@@ -1,5 +1,6 @@
 package com.mohit.shoppingnotification.service;
 
+import com.mohit.shoppingnotification.dto.PaginationResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.mohit.shoppingnotification.dto.ProductResponseDTO;
@@ -141,5 +142,48 @@ public class ProductService {
 
             return dto;
         });
+    }
+
+    public PaginationResponseDTO filterProductsByPrice(
+            Double minPrice,
+            Double maxPrice,
+            Pageable pageable) {
+
+        Page<Product> products =
+                productRepository.findByPriceBetween(
+                        minPrice,
+                        maxPrice,
+                        pageable
+                );
+
+        Page<ProductResponseDTO> productDTOs = products.map(product -> {
+            ProductResponseDTO dto = new ProductResponseDTO();
+
+            dto.setId(product.getId());
+            dto.setName(product.getName());
+            dto.setPrice(product.getPrice());
+
+            return dto;
+        });
+
+        PaginationResponseDTO response = new PaginationResponseDTO();
+
+        response.setProducts(productDTOs.getContent());
+        response.setCurrentPage(productDTOs.getNumber());
+        response.setPageSize(productDTOs.getSize());
+        response.setTotalProducts(productDTOs.getTotalElements());
+        response.setTotalPages(productDTOs.getTotalPages());
+        response.setFirstPage(productDTOs.isFirst());
+        response.setLastPage(productDTOs.isLast());
+
+        return response;
+    }
+
+    public Page<Product> getProductsByPrice(
+            double min,
+            double max,
+            Pageable pageable
+    ) {
+        return productRepository.findByPriceBetween(min, max, pageable);
     }
 }
