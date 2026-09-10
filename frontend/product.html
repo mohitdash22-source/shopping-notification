@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ShopNotify</title>
+    <style>
+        body {
+            border: 1px solid #ddd;
+            background-color: dimgrey;
+            color: brown;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .products {
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            gap: 20px;
+        }
+
+        .product-card {
+            background-color: peachpuff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            width: 220px;
+            text-align: center;
+            color:darkslategray;
+        }
+
+        button {
+            padding: 10px 15px;
+            text-align: center;
+            cursor: pointer;
+            color: #9ca3af;
+            background-color: #08060d;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>ShopNotify</h1>
+
+<p>Welcome to my shopping application.</p>
+
+<input
+        type="text"
+        placeholder="Search products"
+>
+
+<button>Search</button>
+
+<h2>Products</h2>
+
+<div class="products">
+
+    <div class="product-card">
+        <h3>iPhone 15</h3>
+        <p>Price: ₹60,000</p>
+        <button>Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+        <h3>Samsung Galaxy S24</h3>
+        <p>Price: ₹70,000</p>
+        <button>Add to Cart</button>
+    </div>
+
+</div>
+</body>
+</html>

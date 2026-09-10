@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
@@ -12,10 +13,11 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    private final String secretKey =
-            "my-super-secret-key-for-shopping-notification-app-2026";
+    @Value("${jwt.secret}")
+    private String secretKey;
 
-    private final long expirationTime = 1000 * 60 * 60; // 1 hour
+    @Value("${jwt.expiration}")
+    private long expirationTime;
 
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(
@@ -23,10 +25,11 @@ public class JwtService {
         );
     }
 
-    public String generateToken(String username) {
+    public String generateToken(String username, String role) {
 
         return Jwts.builder()
                 .subject(username)
+                .claim("role", role)
                 .issuedAt(new Date())
                 .expiration(new Date(
                         System.currentTimeMillis() + expirationTime
